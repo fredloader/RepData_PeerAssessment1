@@ -1,7 +1,8 @@
 # Reproducible Research: Peer Assessment 1
 
 ## Loading and preprocessing the data
-```{r libraries, echo=TRUE}
+
+```r
 ## Let's load the necessary libraries
 library(graphics)
 library(lattice)
@@ -14,7 +15,8 @@ act_data$date <- as.Date(act_data$date)
 ```
 
 ## What is mean total number of steps taken per day?
-```{r meansteps}
+
+```r
 ## Calculate and report the mean and median total number of steps taken per day
 t_steps <- aggregate(steps~date, data=act_data, sum)
 mn_steps <- mean(t_steps$steps)
@@ -24,8 +26,11 @@ barplot(t_steps$steps, names.arg=t_steps$date, main="Total Number of Steps per D
 legend("top", paste("Mean = ",round(mn_steps),"   Median = ",round(md_steps)))
 ```
 
+![plot of chunk meansteps](figure/meansteps.png) 
+
 ## What is the average daily activity pattern?
-```{r avedaily}
+
+```r
 ## Aggregate mean steps/interval columns to 'ada'
 ada <- aggregate(steps~interval, data=act_data, mean)
 ## Find maximum average steps and corresponding 5-min interval
@@ -36,8 +41,11 @@ plot(ada, type="l", main="Average Daily Steps", xlab="5 Minute Intervals In a Da
 legend("topright", paste("Maximum 5-Minute Interval is",round(max_int)))
 ```
 
+![plot of chunk avedaily](figure/avedaily.png) 
+
 ## Imputing missing values
-```{r missingvalues}
+
+```r
 mydf <- act_data ## Create a new dataset
 tna <- sum(is.na(mydf$steps)) ## Total number of NAs
 t_vect <- which(is.na(mydf$steps)) ## Assign NAs to vector
@@ -61,8 +69,11 @@ barplot(mydf_steps$steps, names.arg=mydf_steps$date, main="Total Number of Steps
 legend("top", paste("Mean = ",round(mydf_mn),"   Median = ",round(mydf_md)))
 ```
 
+![plot of chunk missingvalues](figure/missingvalues.png) 
+
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r daysofweek}
+
+```r
 ## Create new factor column named 'day' using ifelse to determine "weekend" or "weekday"
 mydf$day <- factor(c(ifelse(weekdays(mydf$date) == "Saturday" | weekdays(mydf$date) == "Sunday", "weekend","weekday")))
 ## Compute mean steps/interval per day and aggregate
@@ -70,3 +81,5 @@ new_mydf <- aggregate(steps~interval+day, data=mydf, mean)
 ## Plot the graph
 xyplot(steps ~ interval | day, data = new_mydf, type = "l",xlab="Intervals", ylab="Steps Taken",layout = c(1, 2))
 ```
+
+![plot of chunk daysofweek](figure/daysofweek.png) 
